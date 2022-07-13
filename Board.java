@@ -80,7 +80,7 @@ public class Board extends JPanel implements ActionListener {
         //insectImage = iii.getImage();
         fixedGameElementImageMap.put("insect", iii);
 
-        ImageIcon iih = new ImageIcon("head.png");
+        ImageIcon iih = new ImageIcon("./assets/head.png");
         head = iih.getImage();
     }
 
