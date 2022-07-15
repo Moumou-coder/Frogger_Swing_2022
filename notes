@@ -1,0 +1,2 @@
+le fait de créer movingobjectelement en rendant cette classe abstraite, on rend le jeu plus facilement évolutif.
+amélioration : rendre background dynamique ; refractoré le code en utilisant plus d'interfaces et moins de classes pour rendre le code plus flexible au changement

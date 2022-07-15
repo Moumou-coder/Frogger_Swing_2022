@@ -1,0 +1,1 @@
+le fait de créer movingobjectelement en rendant cette classe abstraite, on rend le jeu plus facilement évolutif.

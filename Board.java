@@ -23,7 +23,7 @@ public class Board extends JPanel implements ActionListener {
     private final int B_WIDTH = 500;
     private final int B_HEIGHT = 550;
     private final int DOT_SIZE = 50;
-    private final int RAND_POS = 29;
+    private final int RAND_POS = 10;
     private final int DELAY = 140;
 
     private int pos_x;
@@ -31,9 +31,11 @@ public class Board extends JPanel implements ActionListener {
     
     private int coinCounter;
     private int insectCounter;
-    //private ArrayList<Coin> coinList ;
+    private int treeTrunkCounter;
     private ArrayList<FixedGameElement> fixedGameElementList ;
+    private ArrayList<MovingObject> movingObjectList ;
     HashMap<String, ImageIcon> fixedGameElementImageMap ;
+    HashMap<String, ImageIcon> movingObjectImageMap ;
 
     private boolean leftDirection = false;
     private boolean rightDirection = false;
@@ -53,7 +55,6 @@ public class Board extends JPanel implements ActionListener {
 
     public Board() throws IOException {
         backgroundImage = ImageIO.read(new File("./assets/background.jpg"));
-//        backgroundImage = ImageIO.read(new File("backgroundWithRiver.jpg"));
 
         initBoard();
     }
@@ -71,17 +72,21 @@ public class Board extends JPanel implements ActionListener {
     private void loadImages() {
     
         fixedGameElementImageMap = new HashMap<String, ImageIcon>();
+        movingObjectImageMap = new HashMap<String, ImageIcon>();
 
         ImageIcon iic = new ImageIcon(Coin.getPathToImage());
         //coinImage = iic.getImage();
         fixedGameElementImageMap.put("coin", iic);
-        
+
         ImageIcon iii = new ImageIcon(Insect.getPathToImage());
         //insectImage = iii.getImage();
         fixedGameElementImageMap.put("insect", iii);
 
         ImageIcon iih = new ImageIcon("./assets/head.png");
         head = iih.getImage();
+
+        ImageIcon iitt = new ImageIcon(TreeTrunk.getPathToImage());
+        movingObjectImageMap.put("treeTrunk", iitt);
     }
 
     private void initGame() {
@@ -93,14 +98,19 @@ public class Board extends JPanel implements ActionListener {
         
         coinCounter = 3;
         insectCounter = 2;
+        treeTrunkCounter = 1;
         fixedGameElementList = new ArrayList<FixedGameElement>();
-        
+        movingObjectList = new ArrayList<MovingObject>();
+
         for(int i = 0; i < coinCounter ; i++){
             fixedGameElementList.add(new Coin(getRandomCoordinate(), getRandomCoordinate()));
         }
         
         for(int i = 0; i < insectCounter ; i++){
             fixedGameElementList.add(new Insect(getRandomCoordinate(), getRandomCoordinate()));
+        }
+        for (int i = 0; i < treeTrunkCounter; i++) {
+            movingObjectList.add(new TreeTrunk(getRandomCoordinate(), 150, 30));
         }
 
         timer = new Timer(DELAY, this);
@@ -124,8 +134,12 @@ public class Board extends JPanel implements ActionListener {
 
             for(FixedGameElement elem: fixedGameElementList){               
                 g.drawImage(fixedGameElementImageMap.get(elem.getType()).getImage(), elem.getPosX(), elem.getPosY(), this);
-            }      
-            
+            }
+
+            for(MovingObject mvObj: movingObjectList){
+                g.drawImage(movingObjectImageMap.get(mvObj.getType()).getImage(), mvObj.getPos_x(), mvObj.getPos_y(), this);
+            }
+
             g.drawImage(head, pos_x, pos_y, this);
 
             Toolkit.getDefaultToolkit().sync();
@@ -159,7 +173,20 @@ public class Board extends JPanel implements ActionListener {
                 System.out.println(coinCounter);
                 System.out.println(score);
             }
-        }    
+        }
+
+        for(MovingObject mvObj: movingObjectList){
+            if ((pos_x == mvObj.getPos_x()) && (pos_y == mvObj.getPos_y())){
+                mvObj.setPos_x(void_x);
+                mvObj.setPos_y(void_y);
+
+                //mvObj.hitBehaviour(this);
+
+//                System.out.println(coinCounter);
+//                System.out.println(score);
+            }
+        }
+
     }
     
     public void incScore(int valueToIncrease){
