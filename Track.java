@@ -1,11 +1,33 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class Track {
 
     private String direction;
     private int limitAmount;
-
-    public Track(String direction, int limitAmount) {
+    private List<MovingObject> trackContent;
+    private int trackPositionY;
+    public Track(String direction, int limitAmount, int trackPositionY) {
         this.direction = direction;
         this.limitAmount = limitAmount;
+        this.trackPositionY = trackPositionY;
+
+    }
+
+    public int getTrackPositionY() {
+        return trackPositionY;
+    }
+
+    public void setTrackPositionY(int trackPositionY) {
+        this.trackPositionY = trackPositionY;
+    }
+
+    public List<MovingObject> getTrackContent() {
+        return trackContent;
+    }
+
+    public void setTrackContent(List<MovingObject> trackContent) {
+        this.trackContent = trackContent;
     }
 
     public String getDirection() {

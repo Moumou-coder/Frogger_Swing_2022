@@ -1,7 +1,9 @@
+import java.util.ArrayList;
+
 public class HighWay extends Track{
 
-    public HighWay(String direction, int limitAmount) {
-        super(direction, limitAmount);
+    public HighWay(String direction, int limitAmount, ArrayList highWayContent, int highWayPositionY) {
+        super(direction, limitAmount, highWayPositionY);
     }
 
     @Override

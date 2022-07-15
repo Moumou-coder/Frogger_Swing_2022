@@ -1,7 +1,9 @@
-public class CentralBerm extends Track{
+import java.util.ArrayList;
 
-    public CentralBerm(String direction, int limitAmount) {
-        super(direction, limitAmount);
+public class CentralBerm extends Track {
+
+    public CentralBerm(int limitAmount, ArrayList berm, int bermPositionY) {
+        super("none", limitAmount, bermPositionY);
     }
 
     @Override
