@@ -7,7 +7,7 @@ public class HighWay extends Track{
     public HighWay(String direction, int limitAmount, ArrayList highWayContent, int highWayPositionY) {
         super(direction, limitAmount, highWayPositionY);
         this.movingObjectsList=setMovingObjectsList(highWayContent);
-        super.setTrackContent(highWayContent);
+        super.setTrackContent(movingObjectsList);
     }
 
     @Override
@@ -22,11 +22,12 @@ public class HighWay extends Track{
 
     public ArrayList setMovingObjectsList(ArrayList<MovingObject> movingObjectsList) {
         var arraylist = new ArrayList<MovingObject>();
-        for(MovingObject mvObject:movingObjectsList){
+        for(MovingObject mvObject: movingObjectsList){
             if(mvObject.getClass() == Car.class){
 
                 Car carObject = (Car) mvObject;
-                arraylist.add(new Car(mvObject.getPos_x(),mvObject.getPos_y(),mvObject.getSpeed(), carObject.getColor()));
+                System.out.println(super.getTrackPositionY());
+                arraylist.add(new Car(mvObject.getPos_x(),super.getTrackPositionY(),mvObject.getSpeed(), carObject.getColor()));
             }
         }
         return arraylist;

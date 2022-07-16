@@ -93,15 +93,15 @@ public class Board extends JPanel implements ActionListener {
         treeTrunkSpeed = 2;
 
         pos_x = B_WIDTH / 2;
-        pos_y = B_HEIGHT / 2;
+        pos_y = B_HEIGHT - 25;
         obj_posX = getRandomCoordinate();
 
 //        coinCounter = 3;
 //        insectCounter = 2;
 
-        treeTrunkCounter = 2;
+        treeTrunkCounter = 0;
 //        trackCounter = 10;
-        carCounter = 3;
+        carCounter = 1;
         bushesCounter = 0;
 
         fixedGameElementList = new ArrayList<FixedGameElement>();
@@ -124,25 +124,25 @@ public class Board extends JPanel implements ActionListener {
             movingObjectList.add(new TreeTrunk(getRandomCoordinate(), 210, treeTrunkSpeed));
         }
 
-        Track track = new CentralBerm(3, fixedGameElementList, 0);
+        Track track = new CentralBerm(3, fixedGameElementList, 25);
         trackList.add(track);
-        track = new HighWay("left", carCounter / 12, getList(), 50 + 10);
+        track = new HighWay("left", carCounter / 12, getList(), 55);
         trackList.add(track);
-        track = new HighWay("right", carCounter / 12, getList(), 100 + 10);
+        track = new HighWay("right", carCounter / 12, getList(), 110);
         trackList.add(track);
-        track = new River("left", treeTrunkCounter, getTrunkList(), 150 + 10);
+        track = new River("left", treeTrunkCounter, getTrunkList(), 160);
         trackList.add(track);
-        track = new River("right", treeTrunkCounter, getTrunkList(), 200 + 10);
+        track = new River("right", treeTrunkCounter, getTrunkList(), 210);
         trackList.add(track);
-        track = new CentralBerm(3, fixedGameElementList, 250);
+        track = new CentralBerm(3, fixedGameElementList, 235);
         trackList.add(track);
-        track = new HighWay("left", carCounter / 12, getList(), 300 + 10);
+        track = new HighWay("left", carCounter / 12, getList(), 300);
         trackList.add(track);
-        track = new HighWay("right", carCounter / 12, getList(), 350 + 10);
+        track = new HighWay("right", carCounter / 12, getList(), 355);
         trackList.add(track);
-        track = new HighWay("left", carCounter / 12, getList(), 400 + 10);
+        track = new HighWay("left", carCounter / 12, getList(), 405);
         trackList.add(track);
-        track = new HighWay("right", carCounter / 12, getList(), 450 + 10);
+        track = new HighWay("right", carCounter / 12, getList(), 455);
         trackList.add(track);
         track = new CentralBerm(3, fixedGameElementList, 500);
         trackList.add(track);
@@ -156,7 +156,7 @@ public class Board extends JPanel implements ActionListener {
     private ArrayList getList() {
         var voitureList = new ArrayList<MovingObject>();
         for (int i = 0; i < carCounter; i++) {
-            voitureList.add(new Car((int) (Math.random() * 500), 50000, (int) (Math.random() * (5-1)+1), panelColor[i % 4]));
+            voitureList.add(new Car((int) (Math.random() * 500), 50000, (int) (Math.random() * (5 - 1) + 1), panelColor[i % 4]));
         }
         return voitureList;
     }
@@ -164,7 +164,7 @@ public class Board extends JPanel implements ActionListener {
     private ArrayList getTrunkList() {
         var trunkList = new ArrayList<MovingObject>();
         for (int i = 0; i < treeTrunkCounter; i++) {
-            trunkList.add(new TreeTrunk((int) (Math.random() * 500), 50000, (int) (Math.random() * (5-1)+1)));
+            trunkList.add(new TreeTrunk((int) (Math.random() * 500), 50000, (int) (Math.random() * (5 - 1) + 1)));
         }
         return trunkList;
     }
@@ -232,6 +232,17 @@ public class Board extends JPanel implements ActionListener {
 
             }
         }
+
+        for (Track trackObject : trackList) {
+            if (trackObject.getClass() == HighWay.class) {
+                for (MovingObject mvObj : ((HighWay) trackObject).getTrackContent()) {
+                    if ((pos_x >= mvObj.getPos_x() && pos_x <= mvObj.getPos_x() + 90) && (pos_y >= mvObj.getPos_y() && pos_y <= mvObj.getPos_y()+60))
+                        System.out.println("touched");
+                }
+            }
+        }
+
+
     }
 
     public void incScore(int valueToIncrease) {
@@ -301,9 +312,9 @@ public class Board extends JPanel implements ActionListener {
         for (Track trackObject : trackList) {
             if (trackObject.getClass() == HighWay.class || trackObject.getClass() == River.class) {
                 for (MovingObject mvObj : trackObject.getTrackContent()) {
-                    if (mvObj.getPos_x() <= 0) mvObj.setPos_x(B_WIDTH) ;
+                    if (mvObj.getPos_x() <= 0) mvObj.setPos_x(B_WIDTH);
                     else if (mvObj.getPos_x() >= B_WIDTH) mvObj.setPos_x(0);
-                    if(mvObj.getClass() == Car.class&&(mvObj.getPos_x() <= 0 || mvObj.getPos_x() >= B_WIDTH)) {
+                    if (mvObj.getClass() == Car.class && (mvObj.getPos_x() <= 0 || mvObj.getPos_x() >= B_WIDTH)) {
                         ((Car) mvObj).setColor(panelColor[rd]);
                     }
                 }
