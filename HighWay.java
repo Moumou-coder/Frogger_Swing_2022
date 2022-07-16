@@ -7,6 +7,7 @@ public class HighWay extends Track{
     public HighWay(String direction, int limitAmount, ArrayList highWayContent, int highWayPositionY) {
         super(direction, limitAmount, highWayPositionY);
         this.movingObjectsList=setMovingObjectsList(highWayContent);
+        super.setTrackContent(highWayContent);
     }
 
     @Override
