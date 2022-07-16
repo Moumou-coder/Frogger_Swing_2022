@@ -1,13 +1,18 @@
+import javax.swing.*;
+import java.awt.*;
+
 public abstract class MovingObject {
 
     private int pos_x;
     private int pos_y;
     private int speed;
+    private Image iconImage;
 
-    public MovingObject(int pos_x, int pos_y, int speed) {
+    public MovingObject(int pos_x, int pos_y, int speed, String iconImage) {
         this.pos_x = pos_x;
         this.pos_y = pos_y;
         this.speed = speed;
+        this.iconImage = new ImageIcon(iconImage).getImage();
     }
 
     public int getPos_x() {
@@ -34,8 +39,13 @@ public abstract class MovingObject {
         this.speed = speed;
     }
 
-    public abstract String getType();
-
     public abstract void hitBehaviour();
 
+    public Image getIconImage(){
+        return iconImage;
+    }
+
+    public void setIconImage(String iconImage) {
+        this.iconImage = new ImageIcon(iconImage).getImage();
+    }
 }

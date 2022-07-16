@@ -1,24 +1,14 @@
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Toolkit;
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
-import javax.swing.JPanel;
-import javax.swing.Timer;
 import java.io.File;
 import java.io.IOException;
-import java.sql.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Random;
 
 public class Board extends JPanel implements ActionListener {
 
@@ -26,13 +16,13 @@ public class Board extends JPanel implements ActionListener {
     private final int B_HEIGHT = 550;
     private final int DOT_SIZE = 50;
     private final int RAND_POS = 10;
-    private final int DELAY = 140;
+    private final int DELAY = 50;
 
     private int treeTrunkSpeed;
     private int pos_x;
     private int pos_y;
     private int obj_posX;
-//    private int trackCounter;
+    //    private int trackCounter;
     private int coinCounter;
     private int insectCounter;
     private int bushesCounter;
@@ -43,6 +33,8 @@ public class Board extends JPanel implements ActionListener {
     private ArrayList<Track> trackList;
     private HashMap<String, ImageIcon> fixedGameElementImageMap;
     private HashMap<String, ImageIcon> movingObjectImageMap;
+
+    private String panelColor[] = {"Red", "Violet", "Orange", "Blue"};
 
     private boolean leftDirection = false;
     private boolean rightDirection = false;
@@ -81,11 +73,9 @@ public class Board extends JPanel implements ActionListener {
         movingObjectImageMap = new HashMap<String, ImageIcon>();
 
         ImageIcon iic = new ImageIcon(Coin.getPathToImage());
-        //coinImage = iic.getImage();
         fixedGameElementImageMap.put("coin", iic);
 
         ImageIcon iii = new ImageIcon(Insect.getPathToImage());
-        //insectImage = iii.getImage();
         fixedGameElementImageMap.put("insect", iii);
 
         ImageIcon iib = new ImageIcon(Bushes.getPathToImage());
@@ -93,9 +83,6 @@ public class Board extends JPanel implements ActionListener {
 
         ImageIcon iih = new ImageIcon("./assets/head.png");
         head = iih.getImage();
-
-        ImageIcon iitt = new ImageIcon(TreeTrunk.getPathToImage());
-        movingObjectImageMap.put("treeTrunk", iitt);
 
     }
 
@@ -112,10 +99,10 @@ public class Board extends JPanel implements ActionListener {
 //        coinCounter = 3;
 //        insectCounter = 2;
 
-        treeTrunkCounter = 0;
+        treeTrunkCounter = 2;
 //        trackCounter = 10;
         carCounter = 3;
-        bushesCounter = 2;
+        bushesCounter = 0;
 
         fixedGameElementList = new ArrayList<FixedGameElement>();
         movingObjectList = new ArrayList<MovingObject>();
@@ -130,58 +117,56 @@ public class Board extends JPanel implements ActionListener {
         }
 
         for (int i = 0; i < bushesCounter; i++) {
-            System.out.println(getRandomCoordinate());
             fixedGameElementList.add(new Bushes(getRandomCoordinate(), 0));
         }
 
         for (int i = 0; i < treeTrunkCounter; i++) {
-            System.out.println(getRandomCoordinate());
             movingObjectList.add(new TreeTrunk(getRandomCoordinate(), 210, treeTrunkSpeed));
-        }
-
-        String arrayColor[] = {"Red", "Violet","Orange","Blue"};
-        for (int i = 0; i < carCounter; i++) {
-            System.out.println(getRandomCoordinate());
-            movingObjectList.add(new Car((int)(Math.random() * 500)  , 50000, (int)(Math.random() * 10), arrayColor[i%4]));
         }
 
         Track track = new CentralBerm(3, fixedGameElementList, 0);
         trackList.add(track);
-        track = new HighWay("left", carCounter/12,  getList(), 50 + 10);
+        track = new HighWay("left", carCounter / 12, getList(), 50 + 10);
         trackList.add(track);
-        track = new HighWay("right", carCounter/12, getList(), 100 + 10);
+        track = new HighWay("right", carCounter / 12, getList(), 100 + 10);
         trackList.add(track);
-        track = new River("left", treeTrunkCounter, movingObjectList, 150 + 10);
+        track = new River("left", treeTrunkCounter, getTrunkList(), 150 + 10);
         trackList.add(track);
-        track = new River("right", treeTrunkCounter, movingObjectList, 200 + 10);
+        track = new River("right", treeTrunkCounter, getTrunkList(), 200 + 10);
         trackList.add(track);
         track = new CentralBerm(3, fixedGameElementList, 250);
         trackList.add(track);
-        track = new HighWay("left", carCounter/12, getList(), 300 + 10);
+        track = new HighWay("left", carCounter / 12, getList(), 300 + 10);
         trackList.add(track);
-        track = new HighWay("right", carCounter/12, getList(), 350 + 10);
+        track = new HighWay("right", carCounter / 12, getList(), 350 + 10);
         trackList.add(track);
-        track = new HighWay("left", carCounter/12, getList(), 400 + 10);
+        track = new HighWay("left", carCounter / 12, getList(), 400 + 10);
         trackList.add(track);
-        track = new HighWay("right", carCounter/12, getList(), 450 + 10);
+        track = new HighWay("right", carCounter / 12, getList(), 450 + 10);
         trackList.add(track);
         track = new CentralBerm(3, fixedGameElementList, 500);
         trackList.add(track);
 
         //Time settings
         timer = new
-        Timer(DELAY, this);
+                Timer(DELAY, this);
         timer.start();
     }
 
-    private ArrayList getList(){
+    private ArrayList getList() {
         var voitureList = new ArrayList<MovingObject>();
-        String arrayColor[] = {"Red", "Violet","Orange","Blue"};
         for (int i = 0; i < carCounter; i++) {
-            System.out.println(getRandomCoordinate());
-            voitureList.add(new Car((int)(Math.random() * 500)  , 50000, (int)(Math.random() * 10), arrayColor[i%4]));
+            voitureList.add(new Car((int) (Math.random() * 500), 50000, (int) (Math.random() * (5-1)+1), panelColor[i % 4]));
         }
         return voitureList;
+    }
+
+    private ArrayList getTrunkList() {
+        var trunkList = new ArrayList<MovingObject>();
+        for (int i = 0; i < treeTrunkCounter; i++) {
+            trunkList.add(new TreeTrunk((int) (Math.random() * 500), 50000, (int) (Math.random() * (5-1)+1)));
+        }
+        return trunkList;
     }
 
     @Override
@@ -205,18 +190,11 @@ public class Board extends JPanel implements ActionListener {
             }
 
             for (Track trackObject : trackList) {
-                if (trackObject.getClass() == River.class) {
-                    for (MovingObject mvObj : ((River) trackObject).getMovingObjectsList()) {
-                        g.drawImage(movingObjectImageMap.get(mvObj.getType()).getImage(), mvObj.getPos_x(), trackObject.getTrackPositionY(), this);
+                if (trackObject.getClass() == HighWay.class || trackObject.getClass() == River.class) {
+                    for (MovingObject mvObj : trackObject.getTrackContent()) {
+                        g.drawImage(mvObj.getIconImage(), mvObj.getPos_x(), trackObject.getTrackPositionY(), this);
                     }
-                }
-                else if (trackObject.getClass() == HighWay.class) {
-                    for (MovingObject mvObj : ((HighWay) trackObject).getMovingObjectsList()) {
-                        Car carObject= (Car)mvObj;
-                        g.drawImage(carObject.getIconImageCar() , mvObj.getPos_x(), trackObject.getTrackPositionY(), this);
-                    }
-                }
-                else if (trackObject.getClass() == CentralBerm.class) {
+                } else if (trackObject.getClass() == CentralBerm.class) {
                     for (FixedGameElement elem : ((CentralBerm) trackObject).getFixedElementList()) {
                         g.drawImage(fixedGameElementImageMap.get(elem.getType()).getImage(), elem.getPosX(), trackObject.getTrackPositionY(), this);
                     }
@@ -252,8 +230,6 @@ public class Board extends JPanel implements ActionListener {
 
                 elem.triggerAction(this);
 
-                System.out.println(coinCounter);
-                System.out.println(score);
             }
         }
     }
@@ -286,21 +262,10 @@ public class Board extends JPanel implements ActionListener {
     }
 
     private void moveImage() {
-
-        //tree speed
-
+        //Track speed
         for (Track trackObject : trackList) {
-            if (trackObject.getClass() == River.class) {
-
-                for (MovingObject mvObj : ((River) trackObject).getMovingObjectsList()) {
-                    if (trackObject.getDirection() == "right")
-                        mvObj.setPos_x(mvObj.getPos_x() - mvObj.getSpeed());
-                    else mvObj.setPos_x(mvObj.getPos_x() + mvObj.getSpeed());
-                }
-            }
-            else if (trackObject.getClass() == HighWay.class) {
-
-                for (MovingObject mvObj : ((HighWay) trackObject).getMovingObjectsList()) {
+            if (trackObject.getClass() == River.class || trackObject.getClass() == HighWay.class) {
+                for (MovingObject mvObj : trackObject.getTrackContent()) {
                     if (trackObject.getDirection() == "right")
                         mvObj.setPos_x(mvObj.getPos_x() - mvObj.getSpeed());
                     else mvObj.setPos_x(mvObj.getPos_x() + mvObj.getSpeed());
@@ -330,6 +295,21 @@ public class Board extends JPanel implements ActionListener {
         if (!inGame) {
             timer.stop();
         }
+
+        int rd = (int) (Math.random() * 4);
+
+        for (Track trackObject : trackList) {
+            if (trackObject.getClass() == HighWay.class || trackObject.getClass() == River.class) {
+                for (MovingObject mvObj : trackObject.getTrackContent()) {
+                    if (mvObj.getPos_x() <= 0) mvObj.setPos_x(B_WIDTH) ;
+                    else if (mvObj.getPos_x() >= B_WIDTH) mvObj.setPos_x(0);
+                    if(mvObj.getClass() == Car.class&&(mvObj.getPos_x() <= 0 || mvObj.getPos_x() >= B_WIDTH)) {
+                        ((Car) mvObj).setColor(panelColor[rd]);
+                    }
+                }
+            }
+        }
+
     }
 
     private int getRandomCoordinate() {

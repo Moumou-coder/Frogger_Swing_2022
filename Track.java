@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -6,7 +7,6 @@ public abstract class Track {
     private String direction;
     private int limitAmount;
     private List<MovingObject> trackContent;
-
     private int trackPositionY;
     public Track(String direction, int limitAmount, int trackPositionY) {
         this.direction = direction;
