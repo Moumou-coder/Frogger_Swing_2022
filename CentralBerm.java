@@ -2,29 +2,29 @@ import java.util.ArrayList;
 
 public class CentralBerm extends Track {
 
-    private ArrayList<FixedGameElement> fixedElementList;
+    private ArrayList<Bushes> bushesArrayList;
 
-    public CentralBerm(int limitAmount, ArrayList bermContent, int bermPositionY) {
+    public CentralBerm(int limitAmount, int bermPositionY) {
         super("none", limitAmount, bermPositionY);
-        this.fixedElementList = setFixedElementList(bermContent);
+        setTrackContent(limitAmount);
     }
 
-    public ArrayList<FixedGameElement> getFixedElementList() {
-        return fixedElementList;
-    }
-
-    public ArrayList setFixedElementList(ArrayList<FixedGameElement> fixedElementList) {
-        this.fixedElementList = fixedElementList;
-        var arraylist = new ArrayList<FixedGameElement>();
-        for(FixedGameElement elem : fixedElementList){
-            arraylist.add(new Bushes(elem.getPosX(), elem.getPosY()));
-        }
-        return arraylist;
+    public ArrayList<Bushes> getFixedElementList() {
+        return bushesArrayList;
     }
 
     @Override
-    public String getType() {
-        return null;
+    public void setTrackContent(int limitAmount) {
+        this.bushesArrayList = new ArrayList<>();
+
+        for (int i = 0; i < limitAmount; i++) {
+            int randPosX = (int) (Math.random() * 500);
+            this.bushesArrayList.add(new Bushes(randPosX, super.getTrackPositionY()));
+        }
+    }
+
+    public ArrayList<Bushes> getBushesArrayList() {
+        return bushesArrayList;
     }
 
     @Override

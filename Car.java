@@ -17,11 +17,11 @@ public class Car extends MovingObject {
 
     public void setColor(String color) {
         this.color = color;
-        super.setIconImage("./assets/car"+color+".png");
+        super.setIconImage("./assets/car" + color + ".png");
     }
 
     @Override
-    public void hitBehaviour() {
+    public void hitBehaviour(Board board) {
 
     }
 }

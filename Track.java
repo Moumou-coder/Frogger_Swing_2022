@@ -8,6 +8,7 @@ public abstract class Track {
     private int limitAmount;
     private List<MovingObject> trackContent;
     private int trackPositionY;
+
     public Track(String direction, int limitAmount, int trackPositionY) {
         this.direction = direction;
         this.limitAmount = limitAmount;
@@ -27,9 +28,7 @@ public abstract class Track {
         return trackContent;
     }
 
-    public void setTrackContent(List<MovingObject> trackContent) {
-        this.trackContent = trackContent;
-    }
+    public abstract void setTrackContent(int limitAmount);
 
     public String getDirection() {
         return direction;
@@ -46,8 +45,6 @@ public abstract class Track {
     public void setLimitAmount(int limitAmount) {
         this.limitAmount = limitAmount;
     }
-
-    public abstract String getType();
 
     public abstract void hitBehaviour();
 

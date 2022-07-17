@@ -1,6 +1,3 @@
-import javax.swing.*;
-import java.awt.*;
-
 public class TreeTrunk extends MovingObject {
 
 
@@ -10,7 +7,7 @@ public class TreeTrunk extends MovingObject {
     }
 
     @Override
-    public void hitBehaviour() {
+    public void hitBehaviour(Board board) {
 
     }
 }
