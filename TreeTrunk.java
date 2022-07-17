@@ -1,4 +1,4 @@
-public class TreeTrunk extends MovingObject {
+public class TreeTrunk extends GameElement {
 
 
     public TreeTrunk(int pos_x, int pos_y, int speed) {
@@ -7,7 +7,7 @@ public class TreeTrunk extends MovingObject {
     }
 
     @Override
-    public void hitBehaviour(Board board) {
+    public void triggerAction(Board board) {
 
     }
 }
