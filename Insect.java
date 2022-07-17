@@ -1,10 +1,10 @@
 
-public class Insect extends FixedGameElement {
+public class Insect extends GameElement {
 
 
     public Insect(int pos_x, int pos_y) {
         
-        super(pos_x, pos_y, "./assets/insect.png");
+        super(pos_x, pos_y, 0,"./assets/insect.png");
     }
     
     public static String getPathToImage(){

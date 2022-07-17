@@ -22,7 +22,6 @@ public class Board extends JPanel implements ActionListener {
     private int treeTrunkSpeed;
     private int pos_x;
     private int pos_y;
-    private int obj_posX;
     private int coinCounter;
     private int insectCounter;
     private int bushesCounter;
@@ -31,6 +30,7 @@ public class Board extends JPanel implements ActionListener {
     private HashMap<String, ImageIcon> fixedGameElementImageMap;
     private HashMap<String, ImageIcon> movingObjectImageMap;
     private List<Track> trackList;
+    private String[] trackArray = {"Berm", "HighWay", "HighWay", "River", "River", "Berm", "HighWay", "HighWay", "HighWay", "HighWay", "Berm"};
 
     private boolean leftDirection = false;
     private boolean rightDirection = false;
@@ -84,7 +84,6 @@ public class Board extends JPanel implements ActionListener {
 
         pos_x = B_WIDTH / 2;
         pos_y = B_HEIGHT - 25;
-        obj_posX = getRandomCoordinate();
 
 //        coinCounter = 3;
 //        insectCounter = 2;
@@ -92,43 +91,14 @@ public class Board extends JPanel implements ActionListener {
         treeTrunkCounter = 1;
         carCounter = 1;
         bushesCounter = 1;
-//
-//        for (int i = 0; i < coinCounter; i++) {
-//            fixedGameElementList.add(new Coin(getRandomCoordinate(), getRandomCoordinate()));
-//        }
-//
-//        for (int i = 0; i < insectCounter; i++) {
-//            fixedGameElementList.add(new Insect(getRandomCoordinate(), getRandomCoordinate()));
-//        }
-
         trackList = new ArrayList<>();
-        Track track = new CentralBerm(bushesCounter, 0);
-        trackList.add(track);
-        track = new HighWay("left", carCounter, 55);
-        trackList.add(track);
-        track = new HighWay("right", carCounter, 110);
-        trackList.add(track);
-//        track = new HighWay("left", carCounter, 160);
-//        trackList.add(track);
-//        track = new HighWay("right", carCounter, 210);
-//        trackList.add(track);
-        track = new River("left", treeTrunkCounter, 160);
-        trackList.add(track);
-        track = new River("right", treeTrunkCounter, 210);
-        trackList.add(track);
-        track = new CentralBerm(bushesCounter, 245);
-        trackList.add(track);
-        track = new HighWay("left", carCounter, 300);
-        trackList.add(track);
-        track = new HighWay("right", carCounter, 355);
-        trackList.add(track);
-        track = new HighWay("left", carCounter, 405);
-        trackList.add(track);
-        track = new HighWay("right", carCounter, 455);
-        trackList.add(track);
-        track = new CentralBerm(bushesCounter, 500);
-        trackList.add(track);
-
+        for (int i = 0; i < trackArray.length ; i++) {
+            Track track;
+            if(trackArray[i] == "Berm" ) track = new CentralBerm(bushesCounter, 50*i);
+            else if(trackArray[i] == "HighWay" ) track = new HighWay("right", carCounter, 50*i);
+            else track = new River("left",treeTrunkCounter, 50*i);
+            trackList.add(track);
+        }
 
         timer = new
                 Timer(DELAY, this);
@@ -147,36 +117,13 @@ public class Board extends JPanel implements ActionListener {
         g.drawImage(backgroundImage, 0, 0, this);
 
         if (inGame) {
-//
-//            for (FixedGameElement elem : fixedGameElementList) {
-//                g.drawImage(fixedGameElementImageMap.get(elem.getType()).getImage(), elem.getPosX(), elem.getPosY(), this);
-//            }
 
-            for (Track trackObject : trackList) {
-                if (trackObject.getClass() == HighWay.class) {
-                    for (Car mvObj : ((HighWay) trackObject).getCarArrayList()) {
-                        g.drawImage(mvObj.getIconImage(), mvObj.getPos_x(), trackObject.getTrackPositionY(), this);
-                    }
-                }
-                if (trackObject.getClass() == River.class) {
-                    for (TreeTrunk mvObj : ((River) trackObject).getTreeTrunkArrayList()) {
-                        g.drawImage(mvObj.getIconImage(), mvObj.getPos_x(), trackObject.getTrackPositionY(), this);
-                    }
-                }
-                if (trackObject.getClass() == CentralBerm.class) {
-                    for (FixedGameElement fxElem : ((CentralBerm) trackObject).getBushesArrayList()) {
-                        g.drawImage(fxElem.getIconImage(), fxElem.getPosX(), trackObject.getTrackPositionY(), this);
-                    }
-                }
-            }
-
+            trackList.forEach(t -> t.getTrackContent().forEach(e -> g.drawImage(e.getIconImage(), e.getPos_x(), e.getPos_y(), this)));
             g.drawImage(head, pos_x, pos_y, this);
-
             Toolkit.getDefaultToolkit().sync();
 
-        } else {
-            gameOver(g);
-        }
+        } else gameOver(g);
+
     }
 
     private void gameOver(Graphics g) {
@@ -192,39 +139,21 @@ public class Board extends JPanel implements ActionListener {
 
     private void checkFixedGameElementCollision() {
 
-//        for (FixedGameElement elem : fixedGameElementList) {
-//            if ((pos_x == elem.getPosX()) && (pos_y == elem.getPosY())) {
-//                elem.setPosX(void_x);
-//                elem.setPosY(void_y);
-//
-//                elem.triggerAction(this);
-//
-//            }
-//        }
-
         for (Track trackObject : trackList) {
             if (trackObject.getClass() == HighWay.class) {
-                for (MovingObject mvObj : ((HighWay) trackObject).getCarArrayList()) {
-                    if ((pos_x >= mvObj.getPos_x() && pos_x <= mvObj.getPos_x() + 90) && (pos_y >= mvObj.getPos_y() && pos_y <= mvObj.getPos_y() + 60)) {
+                for (GameElement elem : trackObject.getTrackContent()) {
+                    if ((pos_x >= elem.getPos_x() && pos_x <= elem.getPos_x() + 90) && (pos_y >= elem.getPos_y() && pos_y <= elem.getPos_y() + 60)) {
                         System.out.println("touched");
                         inGame = false;
-
                     }
                 }
             }
-            if (trackObject.getClass() == River.class) {
-                for (MovingObject mvObj : ((River) trackObject).getTreeTrunkArrayList()) {
-                    if ((pos_x <= mvObj.getPos_x() || pos_x >= mvObj.getPos_x() + 100) && (pos_y >= mvObj.getPos_y() && pos_y <= mvObj.getPos_y() + 50))
-                        System.out.println("Death");
-                }
-            }
+            //todo : faire pour toutes les autres voies comme pour le highway
             if (trackObject.getClass() == CentralBerm.class) {
-                for (FixedGameElement fxElem : ((CentralBerm) trackObject).getBushesArrayList()) {
+                for (GameElement elem : ((CentralBerm) trackObject).getTrackContent()) {
                     //rajouter une logic de collision
                 }
             }
-
-
 
         }
 
@@ -261,20 +190,11 @@ public class Board extends JPanel implements ActionListener {
     private void moveImage() {
         //Track speed
         for (Track trackObject : trackList) {
-            if (trackObject.getClass() == HighWay.class) {
-                for (MovingObject mvObj : ((HighWay) trackObject).getCarArrayList()) {
+                for (GameElement elem : trackObject.getTrackContent()) {
                     if (trackObject.getDirection() == "right")
-                        mvObj.setPos_x(mvObj.getPos_x() - mvObj.getSpeed());
-                    else mvObj.setPos_x(mvObj.getPos_x() + mvObj.getSpeed());
+                        elem.setPos_x(elem.getPos_x() - elem.getSpeed());
+                    else elem.setPos_x(elem.getPos_x() + elem.getSpeed()); // ternaire
                 }
-            }
-            if (trackObject.getClass() == River.class) {
-                for (MovingObject mvObj : ((River) trackObject).getTreeTrunkArrayList()) {
-                    if (trackObject.getDirection() == "right")
-                        mvObj.setPos_x(mvObj.getPos_x() - mvObj.getSpeed());
-                    else mvObj.setPos_x(mvObj.getPos_x() + mvObj.getSpeed());
-                }
-            }
         }
     }
 
@@ -301,32 +221,17 @@ public class Board extends JPanel implements ActionListener {
         }
 
 
-
         for (Track trackObject : trackList) {
-            if (trackObject.getClass() == HighWay.class) {
-                for (Car car : ((HighWay) trackObject).getCarArrayList()) {
-                    if (car.getPos_x() <= 0) car.setPos_x(B_WIDTH);
-                    else if (car.getPos_x() >= B_WIDTH) car.setPos_x(0);
-                    if ((car.getPos_x() <= 0 || car.getPos_x() >= B_WIDTH)) {
-                        ((HighWay) trackObject).changeCarColor(car);
-                    }
-                }
-            }
-            if (trackObject.getClass() == River.class) {
-                for (MovingObject mvObj : ((River) trackObject).getTreeTrunkArrayList()) {
-                    if (mvObj.getPos_x() <= 0) mvObj.setPos_x(B_WIDTH);
-                    else if (mvObj.getPos_x() >= B_WIDTH) mvObj.setPos_x(0);
-//                    }
+            for (GameElement element : trackObject.getTrackContent()) {
+                if (element.getPos_x() <= 0) element.setPos_x(B_WIDTH);
+                else if (element.getPos_x() >= B_WIDTH) element.setPos_x(0); // condition ternaire
+
+                if (element.getClass() == Car.class && (element.getPos_x() <= 0 || element.getPos_x() >= B_WIDTH)) {
+                    ((HighWay) trackObject).changeCarColor((Car) element);
                 }
             }
         }
 
-    }
-
-    private int getRandomCoordinate() {
-
-        int r = (int) (Math.random() * RAND_POS);
-        return ((r * DOT_SIZE));
     }
 
     @Override

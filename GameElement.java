@@ -1,14 +1,14 @@
 import javax.swing.*;
 import java.awt.*;
 
-public abstract class MovingObject {
+public abstract class GameElement {
 
     private int pos_x;
     private int pos_y;
     private int speed;
     private Image iconImage;
 
-    public MovingObject(int pos_x, int pos_y, int speed, String iconImage) {
+    public GameElement(int pos_x, int pos_y, int speed, String iconImage) {
         this.pos_x = pos_x;
         this.pos_y = pos_y;
         this.speed = speed;
@@ -47,6 +47,6 @@ public abstract class MovingObject {
         this.iconImage = new ImageIcon(iconImage).getImage();
     }
 
-    public abstract void hitBehaviour(Board board);
+    public abstract void triggerAction(Board board);
 
 }

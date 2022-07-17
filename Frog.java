@@ -1,4 +1,4 @@
-public class Frog extends MovingObject {
+public class Frog extends GameElement {
 
     private int numberOfLife;
     private boolean superFrog;
@@ -26,7 +26,7 @@ public class Frog extends MovingObject {
     }
 
     @Override
-    public void hitBehaviour(Board board) {
+    public void triggerAction(Board board) {
 
     }
 }

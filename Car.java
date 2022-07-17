@@ -1,7 +1,4 @@
-import javax.swing.*;
-import java.awt.*;
-
-public class Car extends MovingObject {
+public class Car extends GameElement {
 
     private String color;
 
@@ -21,7 +18,7 @@ public class Car extends MovingObject {
     }
 
     @Override
-    public void hitBehaviour(Board board) {
+    public void triggerAction(Board board) {
 
     }
 }
