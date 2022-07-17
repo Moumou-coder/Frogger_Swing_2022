@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class Board extends JPanel implements ActionListener {
 
@@ -22,19 +23,14 @@ public class Board extends JPanel implements ActionListener {
     private int pos_x;
     private int pos_y;
     private int obj_posX;
-    //    private int trackCounter;
     private int coinCounter;
     private int insectCounter;
     private int bushesCounter;
     private int carCounter;
     private int treeTrunkCounter;
-    private ArrayList<FixedGameElement> fixedGameElementList;
-    private ArrayList<MovingObject> movingObjectList;
-    private ArrayList<Track> trackList;
     private HashMap<String, ImageIcon> fixedGameElementImageMap;
     private HashMap<String, ImageIcon> movingObjectImageMap;
-
-    private String panelColor[] = {"Red", "Violet", "Orange", "Blue"};
+    private List<Track> trackList;
 
     private boolean leftDirection = false;
     private boolean rightDirection = false;
@@ -69,17 +65,11 @@ public class Board extends JPanel implements ActionListener {
 
     private void loadImages() {
 
-        fixedGameElementImageMap = new HashMap<String, ImageIcon>();
-        movingObjectImageMap = new HashMap<String, ImageIcon>();
-
-        ImageIcon iic = new ImageIcon(Coin.getPathToImage());
-        fixedGameElementImageMap.put("coin", iic);
-
-        ImageIcon iii = new ImageIcon(Insect.getPathToImage());
-        fixedGameElementImageMap.put("insect", iii);
-
-        ImageIcon iib = new ImageIcon(Bushes.getPathToImage());
-        fixedGameElementImageMap.put("bushes", iib);
+//        ImageIcon iic = new ImageIcon(Coin.getPathToImage());
+//        fixedGameElementImageMap.put("coin", iic);
+//
+//        ImageIcon iii = new ImageIcon(Insect.getPathToImage());
+//        fixedGameElementImageMap.put("insect", iii);
 
         ImageIcon iih = new ImageIcon("./assets/head.png");
         head = iih.getImage();
@@ -99,74 +89,50 @@ public class Board extends JPanel implements ActionListener {
 //        coinCounter = 3;
 //        insectCounter = 2;
 
-        treeTrunkCounter = 0;
-//        trackCounter = 10;
+        treeTrunkCounter = 1;
         carCounter = 1;
-        bushesCounter = 0;
+        bushesCounter = 1;
+//
+//        for (int i = 0; i < coinCounter; i++) {
+//            fixedGameElementList.add(new Coin(getRandomCoordinate(), getRandomCoordinate()));
+//        }
+//
+//        for (int i = 0; i < insectCounter; i++) {
+//            fixedGameElementList.add(new Insect(getRandomCoordinate(), getRandomCoordinate()));
+//        }
 
-        fixedGameElementList = new ArrayList<FixedGameElement>();
-        movingObjectList = new ArrayList<MovingObject>();
-        trackList = new ArrayList<Track>();
-
-        for (int i = 0; i < coinCounter; i++) {
-            fixedGameElementList.add(new Coin(getRandomCoordinate(), getRandomCoordinate()));
-        }
-
-        for (int i = 0; i < insectCounter; i++) {
-            fixedGameElementList.add(new Insect(getRandomCoordinate(), getRandomCoordinate()));
-        }
-
-        for (int i = 0; i < bushesCounter; i++) {
-            fixedGameElementList.add(new Bushes(getRandomCoordinate(), 0));
-        }
-
-        for (int i = 0; i < treeTrunkCounter; i++) {
-            movingObjectList.add(new TreeTrunk(getRandomCoordinate(), 210, treeTrunkSpeed));
-        }
-
-        Track track = new CentralBerm(3, fixedGameElementList, 25);
+        trackList = new ArrayList<>();
+        Track track = new CentralBerm(bushesCounter, 0);
         trackList.add(track);
-        track = new HighWay("left", carCounter / 12, getList(), 55);
+        track = new HighWay("left", carCounter, 55);
         trackList.add(track);
-        track = new HighWay("right", carCounter / 12, getList(), 110);
+        track = new HighWay("right", carCounter, 110);
         trackList.add(track);
-        track = new River("left", treeTrunkCounter, getTrunkList(), 160);
+//        track = new HighWay("left", carCounter, 160);
+//        trackList.add(track);
+//        track = new HighWay("right", carCounter, 210);
+//        trackList.add(track);
+        track = new River("left", treeTrunkCounter, 160);
         trackList.add(track);
-        track = new River("right", treeTrunkCounter, getTrunkList(), 210);
+        track = new River("right", treeTrunkCounter, 210);
         trackList.add(track);
-        track = new CentralBerm(3, fixedGameElementList, 235);
+        track = new CentralBerm(bushesCounter, 245);
         trackList.add(track);
-        track = new HighWay("left", carCounter / 12, getList(), 300);
+        track = new HighWay("left", carCounter, 300);
         trackList.add(track);
-        track = new HighWay("right", carCounter / 12, getList(), 355);
+        track = new HighWay("right", carCounter, 355);
         trackList.add(track);
-        track = new HighWay("left", carCounter / 12, getList(), 405);
+        track = new HighWay("left", carCounter, 405);
         trackList.add(track);
-        track = new HighWay("right", carCounter / 12, getList(), 455);
+        track = new HighWay("right", carCounter, 455);
         trackList.add(track);
-        track = new CentralBerm(3, fixedGameElementList, 500);
+        track = new CentralBerm(bushesCounter, 500);
         trackList.add(track);
 
-        //Time settings
+
         timer = new
                 Timer(DELAY, this);
         timer.start();
-    }
-
-    private ArrayList getList() {
-        var voitureList = new ArrayList<MovingObject>();
-        for (int i = 0; i < carCounter; i++) {
-            voitureList.add(new Car((int) (Math.random() * 500), 50000, (int) (Math.random() * (5 - 1) + 1), panelColor[i % 4]));
-        }
-        return voitureList;
-    }
-
-    private ArrayList getTrunkList() {
-        var trunkList = new ArrayList<MovingObject>();
-        for (int i = 0; i < treeTrunkCounter; i++) {
-            trunkList.add(new TreeTrunk((int) (Math.random() * 500), 50000, (int) (Math.random() * (5 - 1) + 1)));
-        }
-        return trunkList;
     }
 
     @Override
@@ -176,27 +142,30 @@ public class Board extends JPanel implements ActionListener {
         doDrawing(g);
     }
 
-    public Board(String fileName) throws IOException {
-    }
-
     private void doDrawing(Graphics g) {
 
         g.drawImage(backgroundImage, 0, 0, this);
 
         if (inGame) {
-
-            for (FixedGameElement elem : fixedGameElementList) {
-                g.drawImage(fixedGameElementImageMap.get(elem.getType()).getImage(), elem.getPosX(), elem.getPosY(), this);
-            }
+//
+//            for (FixedGameElement elem : fixedGameElementList) {
+//                g.drawImage(fixedGameElementImageMap.get(elem.getType()).getImage(), elem.getPosX(), elem.getPosY(), this);
+//            }
 
             for (Track trackObject : trackList) {
-                if (trackObject.getClass() == HighWay.class || trackObject.getClass() == River.class) {
-                    for (MovingObject mvObj : trackObject.getTrackContent()) {
+                if (trackObject.getClass() == HighWay.class) {
+                    for (Car mvObj : ((HighWay) trackObject).getCarArrayList()) {
                         g.drawImage(mvObj.getIconImage(), mvObj.getPos_x(), trackObject.getTrackPositionY(), this);
                     }
-                } else if (trackObject.getClass() == CentralBerm.class) {
-                    for (FixedGameElement elem : ((CentralBerm) trackObject).getFixedElementList()) {
-                        g.drawImage(fixedGameElementImageMap.get(elem.getType()).getImage(), elem.getPosX(), trackObject.getTrackPositionY(), this);
+                }
+                if (trackObject.getClass() == River.class) {
+                    for (TreeTrunk mvObj : ((River) trackObject).getTreeTrunkArrayList()) {
+                        g.drawImage(mvObj.getIconImage(), mvObj.getPos_x(), trackObject.getTrackPositionY(), this);
+                    }
+                }
+                if (trackObject.getClass() == CentralBerm.class) {
+                    for (FixedGameElement fxElem : ((CentralBerm) trackObject).getBushesArrayList()) {
+                        g.drawImage(fxElem.getIconImage(), fxElem.getPosX(), trackObject.getTrackPositionY(), this);
                     }
                 }
             }
@@ -223,23 +192,40 @@ public class Board extends JPanel implements ActionListener {
 
     private void checkFixedGameElementCollision() {
 
-        for (FixedGameElement elem : fixedGameElementList) {
-            if ((pos_x == elem.getPosX()) && (pos_y == elem.getPosY())) {
-                elem.setPosX(void_x);
-                elem.setPosY(void_y);
-
-                elem.triggerAction(this);
-
-            }
-        }
+//        for (FixedGameElement elem : fixedGameElementList) {
+//            if ((pos_x == elem.getPosX()) && (pos_y == elem.getPosY())) {
+//                elem.setPosX(void_x);
+//                elem.setPosY(void_y);
+//
+//                elem.triggerAction(this);
+//
+//            }
+//        }
 
         for (Track trackObject : trackList) {
             if (trackObject.getClass() == HighWay.class) {
-                for (MovingObject mvObj : ((HighWay) trackObject).getTrackContent()) {
-                    if ((pos_x >= mvObj.getPos_x() && pos_x <= mvObj.getPos_x() + 90) && (pos_y >= mvObj.getPos_y() && pos_y <= mvObj.getPos_y()+60))
+                for (MovingObject mvObj : ((HighWay) trackObject).getCarArrayList()) {
+                    if ((pos_x >= mvObj.getPos_x() && pos_x <= mvObj.getPos_x() + 90) && (pos_y >= mvObj.getPos_y() && pos_y <= mvObj.getPos_y() + 60)) {
                         System.out.println("touched");
+                        inGame = false;
+
+                    }
                 }
             }
+            if (trackObject.getClass() == River.class) {
+                for (MovingObject mvObj : ((River) trackObject).getTreeTrunkArrayList()) {
+                    if ((pos_x <= mvObj.getPos_x() || pos_x >= mvObj.getPos_x() + 100) && (pos_y >= mvObj.getPos_y() && pos_y <= mvObj.getPos_y() + 50))
+                        System.out.println("Death");
+                }
+            }
+            if (trackObject.getClass() == CentralBerm.class) {
+                for (FixedGameElement fxElem : ((CentralBerm) trackObject).getBushesArrayList()) {
+                    //rajouter une logic de collision
+                }
+            }
+
+
+
         }
 
 
@@ -275,8 +261,15 @@ public class Board extends JPanel implements ActionListener {
     private void moveImage() {
         //Track speed
         for (Track trackObject : trackList) {
-            if (trackObject.getClass() == River.class || trackObject.getClass() == HighWay.class) {
-                for (MovingObject mvObj : trackObject.getTrackContent()) {
+            if (trackObject.getClass() == HighWay.class) {
+                for (MovingObject mvObj : ((HighWay) trackObject).getCarArrayList()) {
+                    if (trackObject.getDirection() == "right")
+                        mvObj.setPos_x(mvObj.getPos_x() - mvObj.getSpeed());
+                    else mvObj.setPos_x(mvObj.getPos_x() + mvObj.getSpeed());
+                }
+            }
+            if (trackObject.getClass() == River.class) {
+                for (MovingObject mvObj : ((River) trackObject).getTreeTrunkArrayList()) {
                     if (trackObject.getDirection() == "right")
                         mvObj.setPos_x(mvObj.getPos_x() - mvObj.getSpeed());
                     else mvObj.setPos_x(mvObj.getPos_x() + mvObj.getSpeed());
@@ -307,16 +300,23 @@ public class Board extends JPanel implements ActionListener {
             timer.stop();
         }
 
-        int rd = (int) (Math.random() * 4);
+
 
         for (Track trackObject : trackList) {
-            if (trackObject.getClass() == HighWay.class || trackObject.getClass() == River.class) {
-                for (MovingObject mvObj : trackObject.getTrackContent()) {
+            if (trackObject.getClass() == HighWay.class) {
+                for (Car car : ((HighWay) trackObject).getCarArrayList()) {
+                    if (car.getPos_x() <= 0) car.setPos_x(B_WIDTH);
+                    else if (car.getPos_x() >= B_WIDTH) car.setPos_x(0);
+                    if ((car.getPos_x() <= 0 || car.getPos_x() >= B_WIDTH)) {
+                        ((HighWay) trackObject).changeCarColor(car);
+                    }
+                }
+            }
+            if (trackObject.getClass() == River.class) {
+                for (MovingObject mvObj : ((River) trackObject).getTreeTrunkArrayList()) {
                     if (mvObj.getPos_x() <= 0) mvObj.setPos_x(B_WIDTH);
                     else if (mvObj.getPos_x() >= B_WIDTH) mvObj.setPos_x(0);
-                    if (mvObj.getClass() == Car.class && (mvObj.getPos_x() <= 0 || mvObj.getPos_x() >= B_WIDTH)) {
-                        ((Car) mvObj).setColor(panelColor[rd]);
-                    }
+//                    }
                 }
             }
         }

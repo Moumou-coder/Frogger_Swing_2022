@@ -1,17 +1,13 @@
-public class Bushes extends FixedGameElement{
+public class Bushes extends FixedGameElement {
 
     public Bushes(int pos_x, int pos_y) {
-        super(pos_x, pos_y);
+        super(pos_x, pos_y, "./assets/bushes.png");
     }
 
-    public static String getPathToImage(){
-        return "./assets/bushes.png";
-    }
-
-    public String getType(){
+    public String getType() {
         return "bushes";
     }
 
-    public void triggerAction(Board board){
+    public void triggerAction(Board board) {
     }
 }

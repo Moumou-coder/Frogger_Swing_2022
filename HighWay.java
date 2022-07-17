@@ -1,39 +1,38 @@
 import java.util.ArrayList;
 
-public class HighWay extends Track{
+public class HighWay extends Track {
 
-    private ArrayList<MovingObject> movingObjectsList;
+    private ArrayList<Car> carArrayList;
+    private final String panelColor[] = {"Red", "Violet", "Orange", "Blue"};
 
-    public HighWay(String direction, int limitAmount, ArrayList highWayContent, int highWayPositionY) {
+
+    public HighWay(String direction, int limitAmount, int highWayPositionY) {
         super(direction, limitAmount, highWayPositionY);
-        this.movingObjectsList=setMovingObjectsList(highWayContent);
-        super.setTrackContent(movingObjectsList);
+        setTrackContent(limitAmount);
     }
 
     @Override
-    public String getType() {
-        return null;
+    public void setTrackContent(int limitAmount) {
+        this.carArrayList = new ArrayList<>();
+
+        for (int i = 0; i < limitAmount; i++) {
+            int speed = (int) (Math.random() * (5 - 1) + 1);
+            int randPosX = (int) (Math.random() * 500);
+            this.carArrayList.add(new Car(randPosX, super.getTrackPositionY(), speed, panelColor[i % 4]));
+        }
+    }
+
+    public ArrayList<Car> getCarArrayList() {
+        return carArrayList;
+    }
+
+    public void changeCarColor(Car car) {
+        int iRandomColor = (int) (Math.random() * 4);
+        car.setColor(panelColor[iRandomColor]);
     }
 
     @Override
     public void hitBehaviour() {
 
-    }
-
-    public ArrayList setMovingObjectsList(ArrayList<MovingObject> movingObjectsList) {
-        var arraylist = new ArrayList<MovingObject>();
-        for(MovingObject mvObject: movingObjectsList){
-            if(mvObject.getClass() == Car.class){
-
-                Car carObject = (Car) mvObject;
-                System.out.println(super.getTrackPositionY());
-                arraylist.add(new Car(mvObject.getPos_x(),super.getTrackPositionY(),mvObject.getSpeed(), carObject.getColor()));
-            }
-        }
-        return arraylist;
-    }
-
-    public ArrayList<MovingObject> getMovingObjectsList() {
-        return movingObjectsList;
     }
 }

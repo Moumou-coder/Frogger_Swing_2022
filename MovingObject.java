@@ -39,13 +39,14 @@ public abstract class MovingObject {
         this.speed = speed;
     }
 
-    public abstract void hitBehaviour();
-
-    public Image getIconImage(){
+    public Image getIconImage() {
         return iconImage;
     }
 
     public void setIconImage(String iconImage) {
         this.iconImage = new ImageIcon(iconImage).getImage();
     }
+
+    public abstract void hitBehaviour(Board board);
+
 }

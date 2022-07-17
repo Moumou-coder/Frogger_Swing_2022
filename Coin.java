@@ -2,7 +2,7 @@
 public class Coin extends FixedGameElement {
     
     public Coin(int pos_x, int pos_y) {  
-        super(pos_x, pos_y);
+        super(pos_x, pos_y, "./assets/coin.png");
     }
     
     public static String getPathToImage(){

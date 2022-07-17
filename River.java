@@ -1,31 +1,29 @@
 import java.awt.*;
 import java.util.ArrayList;
 
-public class River extends Track{
+public class River extends Track {
 
-    private ArrayList<MovingObject> movingObjectsList;
+    private ArrayList<TreeTrunk> treeTrunkArrayList;
 
-    public River(String direction, int limitAmount, ArrayList riverContent, int riverPositionY) {
+    public River(String direction, int limitAmount, int riverPositionY) {
         super(direction, limitAmount, riverPositionY);
-        this.movingObjectsList=setMovingObjectsList(riverContent);
-        super.setTrackContent(riverContent);
-    }
-
-    public ArrayList<MovingObject> getMovingObjectsList() {
-        return movingObjectsList;
-    }
-
-    public ArrayList setMovingObjectsList(ArrayList<MovingObject> movingObjectsList) {
-        var arraylist = new ArrayList<MovingObject>();
-        for(MovingObject mvObject:movingObjectsList){
-            arraylist.add(new TreeTrunk(mvObject.getPos_x(),mvObject.getPos_y(),mvObject.getSpeed()));
-        }
-        return arraylist;
+        setTrackContent(limitAmount);
     }
 
     @Override
-    public String getType() {
-        return "river";
+    public void setTrackContent(int limitAmount) {
+        this.treeTrunkArrayList = new ArrayList<>();
+
+        for (int i = 0; i < limitAmount; i++) {
+            int speed = (int) (Math.random() * (3 - 1) + 1);
+            int randPosX = (int) (Math.random() * 500);
+
+            this.treeTrunkArrayList.add(new TreeTrunk(randPosX, super.getTrackPositionY(), speed));
+        }
+    }
+
+    public ArrayList<TreeTrunk> getTreeTrunkArrayList() {
+        return treeTrunkArrayList;
     }
 
     @Override
