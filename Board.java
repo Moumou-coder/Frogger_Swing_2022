@@ -13,24 +13,25 @@ import java.util.List;
 
 public class Board extends JPanel implements ActionListener {
 
-    private final int B_WIDTH = 500;
-    private final int B_HEIGHT = 550;
-    private final int DOT_SIZE = 50;
-    private final int RAND_POS = 10;
+    static final int B_WIDTH = 500;
+    static final int B_HEIGHT = 550;
+    static final int DOT_SIZE = 50;
+//    private final int RAND_POS = 10;
     private final int DELAY = 50;
+    Frog frog;
 
-    private int treeTrunkSpeed;
-    private int pos_x;
-    private int pos_y;
+//    private int treeTrunkSpeed;
+//    private int pos_x;
+//    private int pos_y;
     private int coinCounter;
     private int insectCounter;
     private int bushesCounter;
     private int carCounter;
     private int treeTrunkCounter;
-    private HashMap<String, ImageIcon> fixedGameElementImageMap;
-    private HashMap<String, ImageIcon> movingObjectImageMap;
+//    private HashMap<String, ImageIcon> fixedGameElementImageMap;
+//    private HashMap<String, ImageIcon> movingObjectImageMap;
     private List<Track> trackList;
-    private String[] trackArray = {"Berm", "HighWay", "HighWay", "River", "River", "Berm", "HighWay", "HighWay", "HighWay", "HighWay", "Berm"};
+    private String[] trackArray = {"Berm", "HighWay", "HighWay", "River", "River", "centralBerm", "HighWay", "HighWay", "HighWay", "HighWay", "Berm"};
 
     private boolean leftDirection = false;
     private boolean rightDirection = false;
@@ -39,7 +40,7 @@ public class Board extends JPanel implements ActionListener {
     private boolean inGame = true;
 
     private Timer timer;
-    private Image head;
+//    private Image head;
     private Image backgroundImage;
 
     private int score;
@@ -48,6 +49,7 @@ public class Board extends JPanel implements ActionListener {
 
     public Board() throws IOException {
 
+//        backgroundImage = ImageIO.read(new File("./assets/backgroundWithoutRiver.jpg"));
         backgroundImage = ImageIO.read(new File("./assets/backgroundWithRiver.jpg"));
         initBoard();
 
@@ -59,44 +61,50 @@ public class Board extends JPanel implements ActionListener {
         setFocusable(true);
 
         setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
-        loadImages();
+//        loadImages();
         initGame();
     }
 
-    private void loadImages() {
-
-//        ImageIcon iic = new ImageIcon(Coin.getPathToImage());
-//        fixedGameElementImageMap.put("coin", iic);
+//    private void loadImages() {
 //
-//        ImageIcon iii = new ImageIcon(Insect.getPathToImage());
-//        fixedGameElementImageMap.put("insect", iii);
-
-        ImageIcon iih = new ImageIcon("./assets/head.png");
-        head = iih.getImage();
-
-    }
+////        ImageIcon iic = new ImageIcon(Coin.getPathToImage());
+////        fixedGameElementImageMap.put("coin", iic);
+////
+////        ImageIcon iii = new ImageIcon(Insect.getPathToImage());
+////        fixedGameElementImageMap.put("insect", iii);
+//
+////        ImageIcon iih = new ImageIcon("./assets/head.png");
+////        head = iih.getImage();
+//
+//    }
 
     private void initGame() {
 
         score = 0;
 
-        treeTrunkSpeed = 2;
+//        treeTrunkSpeed = 2;
 
-        pos_x = B_WIDTH / 2;
-        pos_y = B_HEIGHT - 25;
+//        pos_x = B_WIDTH / 2;
+//        pos_y = B_HEIGHT - 25;
 
-//        coinCounter = 3;
-//        insectCounter = 2;
+        coinCounter = 3;
+        insectCounter = 2;
 
         treeTrunkCounter = 1;
         carCounter = 1;
         bushesCounter = 1;
+
         trackList = new ArrayList<>();
-        for (int i = 0; i < trackArray.length ; i++) {
+        frog = new Frog();
+
+
+        for (int i = 1; i < trackArray.length -1; i++) {
             Track track;
-            if(trackArray[i] == "Berm" ) track = new CentralBerm(bushesCounter, 50*i);
-            else if(trackArray[i] == "HighWay" ) track = new HighWay("right", carCounter, 50*i);
-            else track = new River("left",treeTrunkCounter, 50*i);
+
+            if(trackArray[i] == "centralBerm") track = new CentralBerm(bushesCounter, 50 * i);
+            else if (trackArray[i] == "HighWay") track = new HighWay("right", carCounter, 50 * i);
+            else track = new River("left", treeTrunkCounter, 50 * i);
+
             trackList.add(track);
         }
 
@@ -119,7 +127,7 @@ public class Board extends JPanel implements ActionListener {
         if (inGame) {
 
             trackList.forEach(t -> t.getTrackContent().forEach(e -> g.drawImage(e.getIconImage(), e.getPos_x(), e.getPos_y(), this)));
-            g.drawImage(head, pos_x, pos_y, this);
+            g.drawImage(frog.getIconImage(), frog.getPos_x(), frog.getPos_y(), this);
             Toolkit.getDefaultToolkit().sync();
 
         } else gameOver(g);
@@ -142,16 +150,29 @@ public class Board extends JPanel implements ActionListener {
         for (Track trackObject : trackList) {
             if (trackObject.getClass() == HighWay.class) {
                 for (GameElement elem : trackObject.getTrackContent()) {
-                    if ((pos_x >= elem.getPos_x() && pos_x <= elem.getPos_x() + 90) && (pos_y >= elem.getPos_y() && pos_y <= elem.getPos_y() + 60)) {
+                    if ((frog.getPos_x() >= elem.getPos_x() && frog.getPos_x() <= elem.getPos_x() + 90) && (frog.getPos_y() >= elem.getPos_y() && frog.getPos_y() <= elem.getPos_y() + 60)) {
                         System.out.println("touched");
-                        inGame = false;
+//                        inGame = false;
                     }
                 }
             }
-            //todo : faire pour toutes les autres voies comme pour le highway
+
+            if (trackObject.getClass() == River.class) {
+                for (GameElement elem : trackObject.getTrackContent()) {
+                    if ((frog.getPos_x() <= elem.getPos_x() || frog.getPos_x() >= elem.getPos_x() + 100) && (frog.getPos_y() >= elem.getPos_y() && frog.getPos_y() <= elem.getPos_y() + 60)) {
+                        System.out.println("death");
+                    }
+                }
+            }
+
             if (trackObject.getClass() == CentralBerm.class) {
-                for (GameElement elem : ((CentralBerm) trackObject).getTrackContent()) {
-                    //rajouter une logic de collision
+                for (GameElement elem : trackObject.getTrackContent()) {
+                    if ((frog.getPos_x() >= elem.getPos_x() && frog.getPos_x() <= elem.getPos_x() + 50) && (frog.getPos_y() >= elem.getPos_y() && frog.getPos_y() <= elem.getPos_y() + 60)) {
+                        if (leftDirection) frog.setPos_x(frog.getPos_x() + DOT_SIZE);
+                        if (rightDirection) frog.setPos_x(frog.getPos_x() - DOT_SIZE);
+                        if (upDirection) frog.setPos_y(frog.getPos_y() + DOT_SIZE);
+                        if (downDirection) frog.setPos_y(frog.getPos_y() - DOT_SIZE);
+                    }
                 }
             }
 
@@ -171,48 +192,48 @@ public class Board extends JPanel implements ActionListener {
     private void move() {
 
         if (leftDirection) {
-            pos_x -= DOT_SIZE;
+            frog.setPos_x(frog.getPos_x() - DOT_SIZE);
         }
 
         if (rightDirection) {
-            pos_x += DOT_SIZE;
+            frog.setPos_x(frog.getPos_x() + DOT_SIZE);
         }
 
         if (upDirection) {
-            pos_y -= DOT_SIZE;
+            frog.setPos_y(frog.getPos_y() - DOT_SIZE);
         }
 
         if (downDirection) {
-            pos_y += DOT_SIZE;
+            frog.setPos_y(frog.getPos_y() + DOT_SIZE);
         }
     }
 
     private void moveImage() {
         //Track speed
         for (Track trackObject : trackList) {
-                for (GameElement elem : trackObject.getTrackContent()) {
-                    if (trackObject.getDirection() == "right")
-                        elem.setPos_x(elem.getPos_x() - elem.getSpeed());
-                    else elem.setPos_x(elem.getPos_x() + elem.getSpeed()); // ternaire
-                }
+            for (GameElement elem : trackObject.getTrackContent()) {
+                if (trackObject.getDirection() == "right")
+                    elem.setPos_x(elem.getPos_x() - elem.getSpeed());
+                else elem.setPos_x(elem.getPos_x() + elem.getSpeed());
+            }
         }
     }
 
     private void checkCollision() {
 
-        if (pos_y >= B_HEIGHT) {
+        if (frog.getPos_y() >= B_HEIGHT) {
             inGame = false;
         }
 
-        if (pos_y < 0) {
+        if (frog.getPos_y() < 0) {
             inGame = false;
         }
 
-        if (pos_x >= B_WIDTH) {
+        if (frog.getPos_x() >= B_WIDTH) {
             inGame = false;
         }
 
-        if (pos_x < 0) {
+        if (frog.getPos_x() < 0) {
             inGame = false;
         }
 
@@ -224,7 +245,7 @@ public class Board extends JPanel implements ActionListener {
         for (Track trackObject : trackList) {
             for (GameElement element : trackObject.getTrackContent()) {
                 if (element.getPos_x() <= 0) element.setPos_x(B_WIDTH);
-                else if (element.getPos_x() >= B_WIDTH) element.setPos_x(0); // condition ternaire
+                else if (element.getPos_x() >= B_WIDTH) element.setPos_x(0);
 
                 if (element.getClass() == Car.class && (element.getPos_x() <= 0 || element.getPos_x() >= B_WIDTH)) {
                     ((HighWay) trackObject).changeCarColor((Car) element);
