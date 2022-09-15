@@ -2,13 +2,9 @@
 public class Insect extends GameElement {
 
 
-    public Insect(int pos_x, int pos_y) {
+    public Insect() {
         
-        super(pos_x, pos_y, 0,"./assets/insect.png");
-    }
-    
-    public static String getPathToImage(){
-        return "./assets/insect.png";
+        super((int) (Math.random()*500), (int) (Math.random()*500), 0,"./assets/insect.png");
     }
     
     public String getType(){
