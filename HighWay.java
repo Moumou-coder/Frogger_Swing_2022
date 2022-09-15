@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Random;
 
 public class HighWay extends Track {
 
@@ -13,10 +15,12 @@ public class HighWay extends Track {
     @Override
     public void setTrackContent(int limitAmount) {
         super.trackContent = new ArrayList<>();
+        int speed = 3;
         for (int i = 0; i < limitAmount; i++) {
-            int speed = (int) (Math.random() * (5 - 1) + 1);
+//           speed = (int) (Math.random() * (5 - 1) + 1);
             int randPosX = (int) (Math.random() * 500);
-            super.trackContent.add(new Car(randPosX, super.getTrackPositionY(), speed, panelColor[i % 4]));
+            int randElemArray = new Random().nextInt(panelColor.length);
+            super.trackContent.add(new Car(randPosX, super.getTrackPositionY(), speed, panelColor[randElemArray]));
         }
     }
 
