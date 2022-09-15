@@ -1,8 +1,8 @@
 import java.util.ArrayList;
 
-public class CentralBerm extends Track {
+public class Berm extends Track {
 
-    public CentralBerm(int limitAmount, int bermPositionY) {
+    public Berm(int limitAmount, int bermPositionY) {
         super("none", limitAmount, bermPositionY);
         setTrackContent(limitAmount);
     }
