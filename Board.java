@@ -15,22 +15,19 @@ public class Board extends JPanel implements ActionListener {
     static final int B_WIDTH = 500;
     static final int B_HEIGHT = 550;
     static final int DOT_SIZE = 50;
-//    private final int RAND_POS = 10;
     private final int DELAY = 50;
-    Frog frog;
-
-//    private int treeTrunkSpeed;
-//    private int pos_x;
-//    private int pos_y;
+    private Frog frog;
+    private Coin coin;
+    private Insect insect;
+    private int fixedElemCounter;
     private int coinCounter;
     private int insectCounter;
     private int bushesCounter;
     private int carCounter;
     private int treeTrunkCounter;
     private int speed;
-//    private HashMap<String, ImageIcon> fixedGameElementImageMap;
-//    private HashMap<String, ImageIcon> movingObjectImageMap;
     private List<Track> trackList;
+    private List<GameElement> fixedElementList;
     private String[] trackArray = {"Berm", "HighWay", "HighWay", "River", "River", "centralBerm", "HighWay", "HighWay", "HighWay", "HighWay", "Berm"};
 
     private boolean leftDirection = false;
@@ -40,8 +37,6 @@ public class Board extends JPanel implements ActionListener {
     private boolean inGame = true;
 
     private Timer timer;
-//    private Timer chrono;
-//    private Image head;
     private int count;
     private Image backgroundImage;
 
@@ -64,33 +59,14 @@ public class Board extends JPanel implements ActionListener {
         setFocusable(true);
 
         setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
-//        loadImages();
         initGame();
     }
-
-//    private void loadImages() {
-//
-////        ImageIcon iic = new ImageIcon(Coin.getPathToImage());
-////        fixedGameElementImageMap.put("coin", iic);
-////
-////        ImageIcon iii = new ImageIcon(Insect.getPathToImage());
-////        fixedGameElementImageMap.put("insect", iii);
-//
-////        ImageIcon iih = new ImageIcon("./assets/head.png");
-////        head = iih.getImage();
-//
-//    }
 
     private void initGame() {
 
         score = 0;
 
-//        treeTrunkSpeed = 2;
-//        pos_x = B_WIDTH / 2;
-//        pos_y = B_HEIGHT - 25;
-
-        coinCounter = 3;
-        insectCounter = 2;
+        fixedElemCounter = 3;
 
         treeTrunkCounter = 1;
         carCounter = 1;
@@ -98,6 +74,16 @@ public class Board extends JPanel implements ActionListener {
 
         trackList = new ArrayList<>();
         frog = new Frog();
+
+        fixedElementList = new ArrayList<>();
+
+        for (int i = 0; i < fixedElemCounter; i++) {
+            coin = new Coin();
+            fixedElementList.add(coin);
+
+            insect = new Insect();
+            fixedElementList.add(insect);
+        }
 
 
         for (int i = 1; i < trackArray.length -1; i++) {
@@ -129,6 +115,7 @@ public class Board extends JPanel implements ActionListener {
 
             trackList.forEach(t -> t.getTrackContent().forEach(e -> g.drawImage(e.getIconImage(), e.getPos_x(), e.getPos_y(), this)));
             g.drawImage(frog.getIconImage(), frog.getPos_x(), frog.getPos_y(), this);
+            fixedElementList.forEach(f -> g.drawImage(f.getIconImage(), f.getPos_x(), f.getPos_y(), this));
             Toolkit.getDefaultToolkit().sync();
 
         } else gameOver(g);

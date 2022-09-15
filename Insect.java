@@ -1,10 +1,11 @@
 
 public class Insect extends GameElement {
 
+    private static String panelColor = "Red";
 
-    public Insect(int pos_x, int pos_y) {
-        
-        super(pos_x, pos_y, 0,"./assets/insect.png");
+    public Insect() {
+        super((int) (Math.random()*500), (int) (Math.random()*500), 0,"./assets/insect" + panelColor + ".png");
+        panelColor = (panelColor == "Red") ? "Blue" : "Red";
     }
     
     public static String getPathToImage(){
