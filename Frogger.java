@@ -1,11 +1,10 @@
 import java.awt.EventQueue;
 import java.io.IOException;
-import javax.swing.JFrame;
+import javax.swing.*;
 
 public class Frogger extends JFrame {
 
     public Frogger() throws IOException {
-        
         initUI();
     }
     
