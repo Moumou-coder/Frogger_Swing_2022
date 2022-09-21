@@ -7,8 +7,10 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
+import java.sql.DataTruncation;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Board extends JPanel implements ActionListener {
 
@@ -68,9 +70,9 @@ public class Board extends JPanel implements ActionListener {
 
         fixedElemCounter = 3;
 
-        treeTrunkCounter = 1;
+        treeTrunkCounter = 1; // en fonctiond des niveaux
         carCounter = 1;
-        bushesCounter = 1;
+        bushesCounter = 1; //  en fonction des niveaux
 
         trackList = new ArrayList<>();
         frog = new Frog();
@@ -138,7 +140,7 @@ public class Board extends JPanel implements ActionListener {
         for (Track trackObject : trackList) {
             if (trackObject.getClass() == HighWay.class) {
                 for (GameElement elem : trackObject.getTrackContent()) {
-                    if ((frog.getPos_x() >= elem.getPos_x() && frog.getPos_x() <= elem.getPos_x() + 90) && (frog.getPos_y() >= elem.getPos_y() && frog.getPos_y() <= elem.getPos_y() + 60)) {
+                    if ((frog.getPos_x() >= elem.getPos_x()-50 && frog.getPos_x() <= elem.getPos_x() + 90) && (frog.getPos_y() >= elem.getPos_y() && frog.getPos_y() <= elem.getPos_y())) {
 //                        inGame = false;
                     }
                 }
@@ -146,15 +148,17 @@ public class Board extends JPanel implements ActionListener {
 
             if (trackObject.getClass() == River.class) {
                 for (GameElement elem : trackObject.getTrackContent()) {
-                    if ((frog.getPos_x() <= elem.getPos_x() || frog.getPos_x() >= elem.getPos_x() + 100) && (frog.getPos_y() >= elem.getPos_y() && frog.getPos_y() <= elem.getPos_y() + 60)) {
+                    if ((frog.getPos_x() <= elem.getPos_x() || frog.getPos_x() >= elem.getPos_x() + 100) && (frog.getPos_y() >= elem.getPos_y() && frog.getPos_y() <= elem.getPos_y())) {
 //                        inGame = false;
+//                        System.out.println("death");
+
                     }
                 }
             }
 
             if (trackObject.getClass() == Berm.class) {
                 for (GameElement elem : trackObject.getTrackContent()) {
-                    if ((frog.getPos_x() >= elem.getPos_x() && frog.getPos_x() <= elem.getPos_x() + 50) && (frog.getPos_y() >= elem.getPos_y() && frog.getPos_y() <= elem.getPos_y() + 60)) {
+                    if ((frog.getPos_x() >= elem.getPos_x() && frog.getPos_x() <= elem.getPos_x() + 50) && (frog.getPos_y() >= elem.getPos_y() && frog.getPos_y() <= elem.getPos_y())) {
                         if (leftDirection) frog.setPos_x(frog.getPos_x() + DOT_SIZE);
                         if (rightDirection) frog.setPos_x(frog.getPos_x() - DOT_SIZE);
                         if (upDirection) frog.setPos_y(frog.getPos_y() + DOT_SIZE);

@@ -16,6 +16,7 @@ public class Coin extends GameElement {
     public void triggerAction(Board board){
         board.incScore(1);
         board.decreaseCoinAmount();
+
     }
     
 }
