@@ -10,14 +10,15 @@ public class Frog {
     private Image iconImage;
     private int numberOfLife;
     private boolean superFrog;
+    private final int HALF = 2;
 
     public Frog() {
-        this.pos_x = Board.B_WIDTH/2;
-        this.pos_y = Board.B_HEIGHT-25;
-        this.speed = Board.DOT_SIZE;
+        this.pos_x = Board.B_WIDTH/HALF;
+        this.pos_y = Board.B_HEIGHT - Board.DOT_SIZE;
+//        this.speed = Board.DOT_SIZE;
         this.numberOfLife = 3;
         this.superFrog = false;
-        this.iconImage = new ImageIcon("./assets/head.png").getImage();
+        this.iconImage = new ImageIcon("./assets/frog.png").getImage();
     }
 
     public int getPos_x() {

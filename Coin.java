@@ -1,8 +1,8 @@
 
 public class Coin extends GameElement {
     
-    public Coin(int pos_x, int pos_y) {  
-        super(pos_x, pos_y, 0, "./assets/coin.png");
+    public Coin() {
+        super(50*((int)(Math.random()*10)), 50*((int)(Math.random()*10)), 0, "./assets/coin.png");
     }
     
     public static String getPathToImage(){
@@ -14,8 +14,9 @@ public class Coin extends GameElement {
     }
     
     public void triggerAction(Board board){
-        board.incScore(1);
+        board.incScore(10);
         board.decreaseCoinAmount();
+
     }
     
 }

@@ -12,7 +12,7 @@ public class Berm extends Track {
         super.trackContent = new ArrayList<>();
 
         for (int i = 0; i < limitAmount; i++) {
-            int randPosX = (int) (Math.random() * 500);
+            int randPosX = 50*((int)(Math.random()*(9-1)+1));
             super.trackContent.add(new Bushes(randPosX, super.getTrackPositionY()));
         }
     }
