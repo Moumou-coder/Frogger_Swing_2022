@@ -68,7 +68,9 @@ public class Board extends JPanel implements ActionListener {
 
         score = 0;
 
-        fixedElemCounter = 3;
+        coinCounter = 3;
+        insectCounter = 1;
+        fixedElemCounter = coinCounter + insectCounter;
 
         treeTrunkCounter = 1; // en fonctiond des niveaux
         carCounter = 1;
@@ -79,13 +81,15 @@ public class Board extends JPanel implements ActionListener {
 
         fixedElementList = new ArrayList<>();
 
-        for (int i = 0; i < fixedElemCounter; i++) {
-            coin = new Coin();
-            fixedElementList.add(coin);
+            for (int i = 0; i < fixedElemCounter; i++) {
+                if (i < coinCounter){
+                    fixedElementList.add(new Coin());
+                    continue;
+                }
+                fixedElementList.add(new Insect());
+            }
 
-            insect = new Insect();
-            fixedElementList.add(insect);
-        }
+
 
 
         for (int i = 1; i < trackArray.length -1; i++) {
@@ -150,7 +154,6 @@ public class Board extends JPanel implements ActionListener {
                 for (GameElement elem : trackObject.getTrackContent()) {
                     if ((frog.getPos_x() <= elem.getPos_x() || frog.getPos_x() >= elem.getPos_x() + 100) && (frog.getPos_y() >= elem.getPos_y() && frog.getPos_y() <= elem.getPos_y())) {
 //                        inGame = false;
-//                        System.out.println("death");
 
                     }
                 }
@@ -168,8 +171,15 @@ public class Board extends JPanel implements ActionListener {
             }
 
         }
-
-
+        for(GameElement elem : fixedElementList){
+                if ((frog.getPos_x() >= elem.getPos_x() && frog.getPos_x() <= elem.getPos_x()) && (frog.getPos_y() >= elem.getPos_y() && frog.getPos_y() <= elem.getPos_y())) {
+                    elem.setPos_x(void_x);
+                    elem.setPos_y(void_y);
+                    elem.triggerAction(this);
+                    System.out.println("score : " + score);
+                    System.out.println("coinCounter : " + coinCounter);
+                }
+        }
     }
 
     public void incScore(int valueToIncrease) {

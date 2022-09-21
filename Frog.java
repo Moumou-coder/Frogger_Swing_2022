@@ -15,7 +15,7 @@ public class Frog {
     public Frog() {
         this.pos_x = Board.B_WIDTH/HALF;
         this.pos_y = Board.B_HEIGHT - Board.DOT_SIZE;
-        this.speed = Board.DOT_SIZE;
+//        this.speed = Board.DOT_SIZE;
         this.numberOfLife = 3;
         this.superFrog = false;
         this.iconImage = new ImageIcon("./assets/frog.png").getImage();
